@@ -134,16 +134,6 @@ const char index_html[] PROGMEM = R"rawliteral(
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "setpoint/?"+document.getElementById("sp").value, true); 
     xhr.send();
-    if(document.getElementById("sp").value == "duong anh thang")
-    {alert("dcm thắng ngu solo akali thua t");}
-    if(document.getElementById("sp").value == "xuan long")
-    {alert("dcm thang f1");}
-    if(document.getElementById("sp").value == "phu dat")
-    {alert("tên ai mà đẹp trai thế");}
-    if(document.getElementById("sp").value == "cao dac trai")
-    {alert("...");
-    alert("fanboiz nitendo");}
-    else{}
 }
 
         </script>
