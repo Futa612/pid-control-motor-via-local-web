@@ -1,0 +1,177 @@
+<!DOCTYPE HTML><html>
+    <head>
+      <meta charset="UTF-8">
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+      <style>
+        html {
+         font-family: Arial;
+         display: inline-block;
+         margin: 0px auto;
+         text-align: center;
+        }
+        a{
+            font-size: 15px;
+            text-align: center;
+            font-style: italic;
+            color: dodgerblue;
+        }
+        h2 { font-size: 2.3rem; }
+        p { font-size: 2rem; }
+        .units { font-size: 1.2rem; }
+        .speed-labels{
+          font-size: 1.5rem;
+          vertical-align:middle;
+          padding-bottom: 15px;
+        }
+    .switch {position: relative; display: inline-block; width: 120px; height: 68px} 
+    .switch input {display: none}
+    .slider {position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #e08711; border-radius: 34px}
+    .slider:before {position: absolute; content: ""; height: 52px; width: 52px; left: 8px; bottom: 8px; background-color: #fff; -webkit-transition: .4s; transition: .4s; border-radius: 68px}
+    input:checked+.slider {background-color: #059e8a}
+    input:checked+.slider:before {-webkit-transform: translateX(52px); -ms-transform: translateX(52px); transform: translateX(52px)}
+    input[type=text]{
+           width: 60%;
+           border: 2px rgb(187, 187, 187)3);
+           border-radius: 4px;
+           margin: 8px;
+           outline: none;
+           padding: 9px;
+           box-sizing: border-box;
+           transition: 0.3s;
+           
+           ;
+         }
+         input[type=text]:focus{
+            border-color: dodgerblue;
+            box-shadow: 0 0 8px 0 darkcyan;
+         }
+         .btn2{
+              
+              font-family: "Roboto", sans-serif;
+              font-weight: bold;
+              background: #059e8a;
+              width: 100px;
+              padding: 10px;
+              text-align: center;
+              text-decoration: none;
+              text-transform: uppercase;
+              color: #ffffff;
+              border-radius: 5px;
+              cursor: pointer;
+              box-shadow: 0 0 10px rgba(133, 127, 127, 0.658);
+         }
+         .btn2:hover, .btn2:focus, .btn2:active{
+           box-shadow: 0 0 20px rgba(14, 215, 241, 0.5);
+           -webkit-transform: scale(1.1);
+           transform: scale(1.1);
+         }
+      </style>
+    </head>
+    <body>  
+        <h2><i class="fas fa-tachometer-alt" style="color:#059e8a;"></i> 
+        <span class="speed_labels" style="color: #e08711;" style="size: 3rem;" >ESP8288+ ARMF4 WEB SERVER </span>
+        </h2>
+      <p style="color:#059e8a;">
+        
+        <span class="speed-labels">Tốc độ động cơ: </span> 
+        <span id="speed">%SPEED%</span>
+        <sup class="units">vòng/phút</sup>
+      </p>
+      <script>
+        setInterval(function ( ) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              document.getElementById("speed").innerHTML = this.responseText;
+            }
+          };
+          xhttp.open("GET", "/speed", true);
+          xhttp.send();
+        }, 1000 ) ;
+        </script>
+      <h2>
+        <i class="fas fa-keyboard" style="color: #059e8a;"></i>
+        <span class="speed_labels" style="color: #e08711;" style="size: 2.5rem;" >Hệ thống điều khiển</span>
+        </h2>
+        <input name="setpoint" type="text" id="sp" placeholder="Set point...">
+        <button id="Set" onclick="SET(sp)" class="btn2">Set</button><br>
+        <script>
+            function SET(data){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "setpoint/?"+document.getElementById("sp").value, true); 
+    xhr.send();
+    if(document.getElementById("sp").value == "duong anh thang")
+    {alert("dcm thắng ngu solo akali thua t");}
+    if(document.getElementById("sp").value == "xuan long")
+    {alert("dcm thang f1");}
+    if(document.getElementById("sp").value == "phu dat")
+    {alert("tên ai mà đẹp trai thế");}
+    if(document.getElementById("sp").value == "cao dac trai")
+    {alert("...");
+    alert("fanboiz nitendo");}
+    else{}
+}
+
+        </script>
+        %BUTTONPLACEHOLDER% 
+        <script>function toggleCheckbox(element) {
+            var xhr = new XMLHttpRequest();
+            if(element.checked){ xhr.open("GET", "/update?relay="+element.id+"&state=1", true); }
+            else { xhr.open("GET", "/update?relay="+element.id+"&state=0", true); }
+            xhr.send();
+          }</script> 
+      <h2>
+          <i class="fas fa-chart-line " style="color: #059e8a;"></i>
+          <span class="speed_labels" style="color: #e08711;" style="size: 2.5rem;" >
+            Biểu đồ thống kê thời gian thực</span>
+        </h2>
+        <div id="chart-speed" class="container"></div><br><br>
+        <script>
+            var chartT = new Highcharts.Chart({
+              chart:{ renderTo : 'chart-speed' },
+              title: { text: '' },
+              series: [{
+                showInLegend: false,
+                data: []
+              }],
+              plotOptions: {
+                line: { animation: false,
+                  dataLabels: { enabled: true }
+                },
+                series: { color: '#059e8a' }
+              },
+              xAxis: { type: 'datetime',
+                dateTimeLabelFormats: { minute: '%H:%M:%S' },
+                title: {text:null},
+              },
+              yAxis: {
+                title: { text: 'Tốc độ(rpm)' }
+              },
+              credits: { enabled: false }
+            });
+            setInterval(function ( ) {
+              var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 
+                200) {
+                  var x = 'Ngày '+(new Date()).getDate()+'/'+((new Date()).getMonth()+1)+'/'+(new Date()).getFullYear()
+                          +': '+(new Date()).getHours()+' giờ '+(new Date()).getMinutes()+' phút '+(new Date()).getSeconds()+' giây ';
+                  var y = parseFloat(this.responseText);
+                  //console.log(this.responseText);
+                  if(chartT.series[0].data.length > 40) {
+                    chartT.series[0].addPoint([x, y], true, true, true);
+                  } else {
+                    chartT.series[0].addPoint([x, y], true, false, true);
+                  }
+                }
+              };
+              xhttp.open("GET", "/speed", true);
+              xhttp.send();
+            }, 1000 ) ;
+            </script>
+        <a></a><i class="fab fa-facebook" style="color: dodgerblue;"></i></a>    
+        <a href="https://www.facebook.com/profile.php?id=100013465690784">https://www.facebook.com/profile.php?id=100013465690784</a>
+    </body>
+    </html>
